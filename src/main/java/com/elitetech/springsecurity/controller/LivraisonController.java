@@ -5,32 +5,26 @@ import com.elitetech.springsecurity.entity.Livraison;
 import com.elitetech.springsecurity.service.interfaces.LivraisonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
-@RequestMapping("/livraisons")
+@RequestMapping("/api/livraisons")
 public class LivraisonController {
 
     @Autowired
     private LivraisonService service;
 
     @GetMapping
-    public List<Livraison> getAll() {
-        return service.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Livraison> getById(@PathVariable Long id) {
-        Livraison l = service.getById(id);
-        return l != null ? ResponseEntity.ok(l) : ResponseEntity.notFound().build();
+    public ResponseEntity<List<Livraison>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 
     @PostMapping
-    public Livraison create(@RequestBody Livraison l) {
-        return service.save(l);
+    public ResponseEntity<Livraison> create(@RequestBody Livraison l) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(l));
     }
 
     @PutMapping("/{id}")

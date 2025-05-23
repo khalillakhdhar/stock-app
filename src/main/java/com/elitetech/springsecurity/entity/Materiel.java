@@ -32,6 +32,7 @@ public class Materiel {
     private String description;
     private int quantiteStock;
     private int seuilCritique;
+    private int quantite;
 
     @OneToMany(mappedBy = "materiel", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("matriel")

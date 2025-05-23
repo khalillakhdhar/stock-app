@@ -15,6 +15,10 @@ import java.util.Optional;
 
 @Service
 public class UserInfoService implements UserDetailsService {
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
+
 	 @Autowired
 	    private UserInfoRepository userInfoRepository;
 	    @Autowired
@@ -37,8 +41,8 @@ public class UserInfoService implements UserDetailsService {
 	         return userInfoRepository.findAll();
 	    }
    
-    	    public UserInfo getUser(Integer id){
-    	        return userInfoRepository.findById(id).get();
+    	    public Optional<UserInfo> getUser(Integer id){
+    	        return userInfoRepository.findById(id);
     	    }
     	public UserInfo getUserByEmail(String email)
     	{

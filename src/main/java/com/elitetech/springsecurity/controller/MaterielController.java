@@ -1,12 +1,9 @@
 package com.elitetech.springsecurity.controller;
 
-
 import com.elitetech.springsecurity.entity.Materiel;
-import com.elitetech.springsecurity.service.MaterielServiceImpl;
 import com.elitetech.springsecurity.service.interfaces.MaterielService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,33 +13,36 @@ import java.util.List;
 public class MaterielController {
 
     @Autowired
-    private MaterielService service;
+    private MaterielService materielService;
 
     @GetMapping
-    public List<Materiel> getAll() {
-        return service.getAll();
+    public List<Materiel> getAllMateriels() {
+        return materielService.getAllMateriels();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Materiel> getById(@PathVariable Long id) {
-        Materiel materiel = service.getById(id);
-        return materiel != null ? ResponseEntity.ok(materiel) : ResponseEntity.notFound().build();
+    public Materiel getMaterielById(@PathVariable Long id) {
+        return materielService.getMaterielById(id).orElseThrow(() -> new RuntimeException("Matériel non trouvé"));
     }
 
-    @PostMapping
-    public Materiel create(@RequestBody Materiel materiel) {
-        return service.save(materiel);
+    @PostMapping("/add")
+    public Materiel addMateriel(@RequestBody Materiel materiel) {
+        return materielService.addMateriel(materiel);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Materiel> update(@PathVariable Long id, @RequestBody Materiel materiel) {
-        materiel.setId(id);
-        return ResponseEntity.ok(service.save(materiel));
+    @DeleteMapping("/delete/{id}")
+    public void deleteMateriel(@PathVariable Long id) {
+        materielService.deleteMateriel(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/stock/add/{id}/{quantity}")
+    public Materiel addStock(@PathVariable Long id, @PathVariable int quantity) {
+        return materielService.updateStock(id, quantity, true);
     }
+
+    @PutMapping("/stock/remove/{id}/{quantity}")
+    public Materiel removeStock(@PathVariable Long id, @PathVariable int quantity) {
+        return materielService.updateStock(id, quantity, false);
+    }
+
 }

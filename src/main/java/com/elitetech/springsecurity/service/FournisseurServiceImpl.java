@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FournisseurServiceImpl implements FournisseurService {
@@ -16,6 +17,6 @@ public class FournisseurServiceImpl implements FournisseurService {
 
     public Fournisseur save(Fournisseur f) { return repo.save(f); }
     public List<Fournisseur> getAll() { return repo.findAll(); }
-    public Fournisseur getById(Long id) { return repo.findById(id).orElse(null); }
+    public Optional<Fournisseur> getById(Long id) { return repo.findById(id); }
     public void delete(Long id) { repo.deleteById(id); }
 }
