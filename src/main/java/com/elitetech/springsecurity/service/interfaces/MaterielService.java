@@ -11,5 +11,7 @@ public interface MaterielService {
     Materiel addMateriel(Materiel materiel);
     void deleteMateriel(Long id);
     Materiel updateMateriel(Materiel materiel);
+    long countMateriels();
+
     Materiel updateStock(Long id, int quantity, boolean isAddition);
 }

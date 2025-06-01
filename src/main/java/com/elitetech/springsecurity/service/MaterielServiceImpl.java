@@ -19,6 +19,10 @@ public class MaterielServiceImpl implements MaterielService {
     public List<Materiel> getAllMateriels() {
         return materielRepository.findAll();
     }
+    @Override
+    public long countMateriels() {
+        return materielRepository.count();
+    }
 
     @Override
     public Optional<Materiel> getMaterielById(Long id) {

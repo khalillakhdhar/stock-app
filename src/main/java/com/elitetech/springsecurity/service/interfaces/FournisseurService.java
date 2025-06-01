@@ -11,4 +11,6 @@ public interface FournisseurService {
     List<Fournisseur> getAll();
     Optional<Fournisseur> getById(Long id);
     void delete(Long id);
+    long countFournisseurs();
+
 }

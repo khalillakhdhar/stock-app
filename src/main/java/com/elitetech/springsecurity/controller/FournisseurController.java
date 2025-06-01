@@ -19,6 +19,10 @@ public class FournisseurController {
 
     @Autowired
     private FournisseurService service;
+    @GetMapping("/count")
+    public ResponseEntity<Long> countFournisseurs() {
+        return ResponseEntity.ok(service.countFournisseurs());
+    }
 
     @GetMapping
     public ResponseEntity<List<Fournisseur>> getAll() {

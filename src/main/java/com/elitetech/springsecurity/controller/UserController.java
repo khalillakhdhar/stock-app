@@ -97,6 +97,10 @@ public class UserController {
     public ResponseEntity<List<UserInfo>> getAllUsers() {
         return ResponseEntity.ok(userInfoService.getAllUser());
     }
+    @GetMapping("/users/count")
+    public ResponseEntity<Long> countUsers() {
+        return ResponseEntity.ok(userInfoService.countUsers());
+    }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<UserInfo> getUserById(@PathVariable Integer id) {

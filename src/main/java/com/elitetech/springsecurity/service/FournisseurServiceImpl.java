@@ -19,4 +19,9 @@ public class FournisseurServiceImpl implements FournisseurService {
     public List<Fournisseur> getAll() { return repo.findAll(); }
     public Optional<Fournisseur> getById(Long id) { return repo.findById(id); }
     public void delete(Long id) { repo.deleteById(id); }
+    @Override
+    public long countFournisseurs() {
+        return repo.count();
+    }
+    
 }

@@ -48,5 +48,9 @@ public class UserInfoService implements UserDetailsService {
     	{
     		return userInfoRepository.findByEmail(email).orElse(null);
     	}
+    	public long countUsers() {
+    	    return userInfoRepository.count();
+    	}
+
 }
 

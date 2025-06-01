@@ -4,6 +4,7 @@ import com.elitetech.springsecurity.entity.Materiel;
 import com.elitetech.springsecurity.service.interfaces.MaterielService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,10 @@ public class MaterielController {
 
     @Autowired
     private MaterielService materielService;
+    @GetMapping("/count")
+    public ResponseEntity<Long> countMateriels() {
+        return ResponseEntity.ok(materielService.countMateriels());
+    }
 
     @GetMapping
     public List<Materiel> getAllMateriels() {
