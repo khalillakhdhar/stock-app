@@ -14,54 +14,31 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.elitetech.springsecurity.service.JwtService;
 import com.elitetech.springsecurity.service.UserInfoService;
-
 import java.io.IOException;
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-
     @Autowired
     private JwtService jwtService;
-
     @Autowired
     private UserInfoService userInfoService;
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
-            throws ServletException, IOException {
-    	
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        String token = null;
+        String token= null;
         String userName = null;
-
-        // Extraire le token de l'en-tête Authorization
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if(authHeader !=null && authHeader.startsWith("Bearer")){
             token = authHeader.substring(7);
-            userName = jwtService.extractUserName(token);
+            userName =jwtService.extractUserName(token);
         }
-
-        // Si aucun token JWT ou si l'utilisateur est déjà authentifié, passer la requête
-        if (userName == null || SecurityContextHolder.getContext().getAuthentication() != null) {
-            filterChain.doFilter(request, response);
-            return; // Laisser passer la requête
+        if(userName !=null && SecurityContextHolder.getContext().getAuthentication()==null){
+            UserDetails userDetails = userInfoService.loadUserByUsername(userName);
+            if(jwtService.validateToken(token,userDetails)){
+                UsernamePasswordAuthenticationToken authToken =  new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
         }
-
-        // Charger les détails de l'utilisateur et valider le token
-        UserDetails userDetails = userInfoService.loadUserByUsername(userName);
-        System.out.println("Token OK pour : " + userName);
-
-        if (jwtService.validateToken(token, userDetails)) {
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities() // ← vide ici, c’est OK
-            );
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            // 🔍 AJOUTE CECI :
-            System.out.println("Authentifié : " + userDetails.getUsername());
-            System.out.println("Authorities : " + userDetails.getAuthorities());
-            
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-        }
-
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request,response);
     }
 }

@@ -1,27 +1,32 @@
 package com.elitetech.springsecurity.service;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.elitetech.springsecurity.entity.UserInfo;
+
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserInfoDetails implements UserDetails {
-    private static final long serialVersionUID = 1L;
-
-    private String userName;
-    private String password;
+	private static final long serialVersionUID = 1L;
+	String userName=null;
+    String password = null;
+    List<GrantedAuthority> authorities;
 
     public UserInfoDetails(UserInfo userInfo){
-        this.userName = userInfo.getEmail();
-        this.password = userInfo.getPassword();
+       userName= userInfo.getEmail();
+       password= userInfo.getPassword();
+       authorities= Arrays.stream(userInfo.getRoles().split(","))
+               .map(SimpleGrantedAuthority::new)
+               .collect(Collectors.toList());
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // ✅ pas de rôle
+        return authorities;
     }
-
     @Override
     public String getPassword() {
         return password;
