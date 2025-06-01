@@ -19,6 +19,10 @@ public class MaterielController {
     public ResponseEntity<Long> countMateriels() {
         return ResponseEntity.ok(materielService.countMateriels());
     }
+    @GetMapping("/stock-critique-percentage")
+    public ResponseEntity<Double> getStockCritiquePercentage() {
+        return ResponseEntity.ok(materielService.getStockCritiquePercentage());
+    }
 
     @GetMapping
     public List<Materiel> getAllMateriels() {

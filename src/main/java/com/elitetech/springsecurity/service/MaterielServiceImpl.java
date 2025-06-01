@@ -14,6 +14,15 @@ public class MaterielServiceImpl implements MaterielService {
 
     @Autowired
     private MaterielRepository materielRepository;
+    @Override
+    public double getStockCritiquePercentage() {
+        List<Materiel> all = materielRepository.findAll();
+        long total = all.size();
+        long enCritique = all.stream()
+            .filter(m -> m.getQuantite() <= m.getSeuilCritique())
+            .count();
+        return total == 0 ? 0 : ((double) enCritique / total) * 100;
+    }
 
     @Override
     public List<Materiel> getAllMateriels() {

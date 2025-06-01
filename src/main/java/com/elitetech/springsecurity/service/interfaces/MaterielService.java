@@ -12,6 +12,7 @@ public interface MaterielService {
     void deleteMateriel(Long id);
     Materiel updateMateriel(Materiel materiel);
     long countMateriels();
+    double getStockCritiquePercentage();
 
     Materiel updateStock(Long id, int quantity, boolean isAddition);
 }
